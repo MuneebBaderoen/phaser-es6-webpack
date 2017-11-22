@@ -44,7 +44,7 @@ export class State extends Phaser.State {
   }
 
   render (game) {
-    console.log('render')
+    // console.log('base render')
   }
 
   shutdown (game) {

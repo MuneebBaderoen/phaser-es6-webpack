@@ -9,10 +9,6 @@ var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
 var pixi = path.join(phaserModule, 'build/custom/pixi.js')
 var p2 = path.join(phaserModule, 'build/custom/p2.js')
 
-var definePlugin = new webpack.DefinePlugin({
-  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
-})
-
 module.exports = {
   entry: {
     app: [
@@ -30,8 +26,13 @@ module.exports = {
   },
   watch: true,
   plugins: [
-    definePlugin,
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.bundle.js'
+    }),
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: './src/index.html',
@@ -71,6 +72,7 @@ module.exports = {
     tls: 'empty'
   },
   resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     alias: {
       'phaser': phaser,
       'pixi': pixi,

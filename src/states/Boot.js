@@ -24,7 +24,6 @@ export default class extends Phaser.State {
   }
 
   render () {
-    console.log('rendering')
     if (this.fontsReady) {
       if (!this.timeout) {
         this.timeout = setTimeout(() => {

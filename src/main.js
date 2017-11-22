@@ -8,7 +8,7 @@ import GameState from './states/Game'
 
 import config from './config'
 
-import { State } from './states/_state'
+import { State } from './core/_state'
 
 class Game extends Phaser.Game {
   constructor () {

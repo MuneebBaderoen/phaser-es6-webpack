@@ -11,14 +11,17 @@ import config from './config'
 class Game extends Phaser.Game {
   constructor () {
     const docElement = document.documentElement
-    const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth
-    const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight
 
-    super(width, height, Phaser.CANVAS, 'content', null)
+    // Update config with screen dimensions
+    config.gameWidth = docElement.clientWidth
+    config.gameHeight = docElement.clientHeight
 
-    this.state.add('Boot', BootState, false)
-    this.state.add('Base', InitialState, false)
-    this.state.add('Game', GameState, false)
+    // Initialize webgl context
+    super(config.gameWidth, config.gameHeight, Phaser.WEBGL, 'content', null)
+
+    // this.state.add('Boot', BootState, false)
+    this.state.add('Game', InitialState, false)
+    // this.state.add('Game', GameState, false)
 
     // with Cordova with need to wait that the device is ready so we will call the Boot state in another file
     if (window.cordova) {
@@ -32,8 +35,7 @@ class Game extends Phaser.Game {
     if (window.cordova) {
 
     }
-
-    this.state.start('Base')
+    this.state.start('Game')
   }
 }
 

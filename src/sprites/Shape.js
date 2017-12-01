@@ -10,8 +10,8 @@ const tileSize = 64
 
 class ShapeTemplate {
   constructor ({
-    tilemap = [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    gridSize = 5
+    tilemap = [0, 0, 0, 0, 1, 0, 0, 0, 0],
+    gridSize = 3
   } = {}) {
     this.gridSize = gridSize
     this.values = this.fillArray(tilemap, this.gridSize * this.gridSize, 0)
@@ -28,18 +28,65 @@ class ShapeTemplate {
   }
 }
 
-export class Shape extends Phaser.Sprite {
-  static enableBoundingBoxes = true
+const templates = [
+  new ShapeTemplate({
+    tilemap: [
+      0, 0, 0,
+      0, 1, 1,
+      0, 0, 0
+    ]
+  }),
+  new ShapeTemplate({
+    tilemap: [
+      0, 0, 0,
+      1, 1, 1,
+      0, 0, 0
+    ]
+  })
+]
 
+function spawnPoint (game) {
+  const points = [
+    {
+      position: new Phaser.Point(game.world.centerX, game.world.centerY),
+      velocity: new Phaser.Point(260, 0)
+    }
+  ]
+
+  return points[Math.floor(Math.random(points.length))]
+}
+
+export class Shape extends Phaser.Sprite {
   constructor ({
     game,
-    position = new Phaser.Point(),
-    template = new ShapeTemplate()
+    position,
+    velocity = new Phaser.Point(),
+    template = templates[Math.floor(Math.random() * templates.length)]
   } = {}) {
     super(game)
 
-    this.position = position
+    // Treat shapes as physics objects
+    game.physics.arcade.enable(this)
 
+    if (_.isUndefined(position)) {
+      let {position, velocity} = spawnPoint(game)
+      this.position = position
+      this.body.velocity = velocity
+    } else {
+      this.position = position
+      this.body.velocity = velocity
+    }
+
+    // Bounds are not automagically recalculated.
+    // Need to recalculate bounds
+    this.recalculateBounds()
+
+    // Enable collision with 'walls'
+    this.body.collideWorldBounds = true
+
+    // ============================================
+    // Generate tiles from template
+    // ============================================
     if (template.gridSize % 2 === 0) { throw new Error('Template grid size must be odd') }
 
     let centerPosition
@@ -66,23 +113,10 @@ export class Shape extends Phaser.Sprite {
       }
     })
 
-    // Treat shapes as physics objects
-    // this.enableBody = true
-    game.physics.arcade.enable(this)
-
-    // Bounds are not automagically recalculated.
-    // Need to recalculate bounds
-    this.recalculateBounds()
-
-    // Enable collision with 'walls'
-    this.body.collideWorldBounds = true
-
     // Set rotation pivot
     this.pivot.x = centerPosition.x
     this.pivot.y = centerPosition.y
 
-    this.body.velocity.y = 30
-    // this.body.angularVelocity = 10
     return this
   }
 
@@ -135,7 +169,11 @@ export class Shape extends Phaser.Sprite {
   }
 
   update () {
+    const enableBoundingBoxes = true
+
+    if (enableBoundingBoxes) {
+      this.game.debug.geom(this.getBounds())
+    }
     this.recalculateBounds()
-    this.game.debug.geom(this.getBounds())
   }
 }

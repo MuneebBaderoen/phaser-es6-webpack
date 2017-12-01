@@ -7,12 +7,13 @@ export class InitialState extends State {
     this.load.image('tile', 'assets/images/white_square.png')
   }
   create (game) {
-    this.shape = new Shape({
-      game,
-      position: new Phaser.Point(700, 300)
-    })
+    setInterval(() => {
+      this.shape = new Shape({
+        game
+      })
 
-    game.add.existing(this.shape)
+      game.add.existing(this.shape)
+    }, 1000)
     game.physics.startSystem(Phaser.Physics.ARCADE)
   }
 

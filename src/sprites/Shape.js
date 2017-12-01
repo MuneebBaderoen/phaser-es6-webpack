@@ -134,8 +134,8 @@ export class Shape extends Phaser.Sprite {
     )
   }
 
-  update (game) {
+  update () {
     this.recalculateBounds()
-    game.debug.geom(this.getBounds())
+    this.game.debug.geom(this.getBounds())
   }
 }

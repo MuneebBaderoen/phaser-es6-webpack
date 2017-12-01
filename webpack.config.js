@@ -21,7 +21,7 @@ module.exports = {
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './dist/',
+    publicPath: '/dist',
     filename: 'bundle.js'
   },
   watch: true,
@@ -49,14 +49,14 @@ module.exports = {
         removeEmptyAttributes: false
       },
       hash: false
-    }),
-    new BrowserSyncPlugin({
-      host: process.env.IP || 'localhost',
-      port: process.env.PORT || 3000,
-      server: {
-        baseDir: ['./', './build']
-      }
     })
+    // new BrowserSyncPlugin({
+    //   host: process.env.IP || 'localhost',
+    //   port: process.env.PORT || 3000,
+    //   server: {
+    //     baseDir: ['./', './build']
+    //   }
+    // })
   ],
   module: {
     rules: [

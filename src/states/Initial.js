@@ -5,7 +5,6 @@ import { Shape } from '../sprites/Shape'
 export class InitialState extends State {
   preload () {
     this.load.image('tile', 'assets/images/white_square.png')
-    this.load.image('mushroom', 'assets/images/mushroom2.png')
   }
   create (game) {
     this.shape = new Shape({
@@ -23,7 +22,6 @@ export class InitialState extends State {
     // this.shape.position.x += 1
   }
 
-  render (game) {
-    game.debug.geom(this.shape.getBounds())
-  }
+  // render (game) {
+  // }
 }

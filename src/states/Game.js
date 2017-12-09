@@ -3,8 +3,8 @@ import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 
 export default class extends Phaser.State {
-  init () {}
   preload (game) {
+    game.load.image('mushroom', 'assets/images/mushroom2.png')
     game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.Tilemap.TILED_JSON)
     game.load.image('tile_image', 'assets/tilesets/UrbanBlock(SHADOW)_centre.png')
     game.load.image('background', 'assets/tilesets/UrbanBackground.png')
@@ -48,9 +48,9 @@ export default class extends Phaser.State {
 
   setGravityMode (key) {
     this.unbindKeys = () => {}
-    const gravityForce = 300
-    const jumpVelocity = 290
-    const moveVelocity = 100
+    const gravityForce = 500
+    const jumpVelocity = 390
+    const moveVelocity = 280
 
     switch (key.keyCode) {
       case 37:
@@ -103,9 +103,12 @@ export default class extends Phaser.State {
     this.game.input.keyboard.removeKey(Phaser.Keyboard.S)
     this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
 
-    this.game.input.keyboard.addKey(jumpKey).onDown.add(this.jump, this)
-    this.game.input.keyboard.addKey(leftKey).onDown.add(this.moveLeft, this)
-    this.game.input.keyboard.addKey(rightKey).onDown.add(this.moveRight, this)
+    this.jumpKey = this.game.input.keyboard.addKey(jumpKey)
+    this.jumpKey.onDown.add(this.jump, this)
+    this.leftKey = this.game.input.keyboard.addKey(leftKey)
+    this.leftKey.onDown.add(this.moveLeft, this)
+    this.rightKey = this.game.input.keyboard.addKey(rightKey)
+    this.rightKey.onDown.add(this.moveRight, this)
   }
 
   moveLeft () {
@@ -120,17 +123,21 @@ export default class extends Phaser.State {
 
   jump () {
     console.log('jump')
-    this.mushroom.body.velocity = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)
+    this.mushroom.body.velocity[this.jumpAxis] = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)[this.jumpAxis]
   }
 
   update (game) {
     game.physics.arcade.collide(this.mushroom, this.layer)
     game.physics.arcade.collide(this.mushroom, this.platforms)
+    if (!this.jumpKey.isDown && !this.leftKey.isDown && !this.rightKey.isDown) {
+      this.mushroom.body.velocity.x *= 0.98
+      this.mushroom.body.velocity.y *= 0.98
+    }
   }
 
   render () {
     if (__DEV__) {
-      this.game.debug.spriteInfo(this.mushroom, 32, 32)
+      // this.game.debug.spriteInfo(this.mushroom, 32, 32)
     }
   }
 }

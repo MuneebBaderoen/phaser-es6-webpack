@@ -6,7 +6,7 @@ export default class extends Phaser.State {
   preload (game) {
     game.load.image('mushroom', 'assets/images/Ball.png')
     game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.Tilemap.TILED_JSON)
-    game.load.image('tile_image', 'assets/tilesets/UrbanBlock(SHADOW)_centre.png')
+    game.load.image('outer_block', 'assets/tilesets/UrbanBlock(BRICKS).png')
     game.load.image('background', 'assets/tilesets/UrbanBackground.png')
 
     game.can_jump = false
@@ -18,7 +18,7 @@ export default class extends Phaser.State {
 
     // Setup tilemap
     this.map = this.game.add.tilemap('Level1')
-    this.map.addTilesetImage('urban_block', 'tile_image')
+    this.map.addTilesetImage('urban_brick', 'outer_block')
     this.map.setCollision(1)
     this.layer = this.map.createLayer('Terrain')
     // this.layer.debug = true
@@ -124,6 +124,7 @@ export default class extends Phaser.State {
   }
 
   jump () {
+    console.log('jump')
     if (game.can_jump) {
       this.mushroom.body.velocity[this.jumpAxis] = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)[this.jumpAxis]
     }

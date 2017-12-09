@@ -5,9 +5,13 @@ import Mushroom from '../sprites/Mushroom'
 export default class extends Phaser.State {
   init () {}
   preload (game) {
-    game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.TILED_JSON)
-    // game.load.tilemap('mario', 'assets/levels/mario.json', null, Phaser.Tilemap.TILED_JSON)
+    // game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.TILED_JSON)
+    // // game.load.tilemap('mario', 'assets/levels/mario.json', null, Phaser.Tilemap.TILED_JSON)
+    // game.load.image('tile_image', 'assets/tilesets/UrbanBlock(SHADOW)_centre.png')
+
+    game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.Tilemap.TILED_JSON)
     game.load.image('tile_image', 'assets/tilesets/UrbanBlock(SHADOW)_centre.png')
+    game.load.image('background', 'assets/tilesets/UrbanBackground.png')
   }
 
   create () {
@@ -15,17 +19,19 @@ export default class extends Phaser.State {
     // this.map.addTilesetImage('testtileset')
     // this.map_layer = map.createLayer('World1')
     // this.map_layer.resizeWorld()
-
+    this.background = new Phaser.Sprite(this.game, 0, 0, 'background')
+    this.game.add.existing(this.background)
     //  The 'mario' key here is the Loader key given in game.load.tilemap
     this.map = this.game.add.tilemap('Level1')
     this.map.addTilesetImage('urban_block', 'tile_image')
-    // this.map.setCollision(0)
-    // layer.debug = true;
+    this.map.setCollision(1)
 
-    this.layer = this.map.createLayer('layer')
+    this.layer = this.map.createLayer('Terrain')
+    this.background = this.map.createLayer('BackGround')
+    // this.layer.debug = true
     // this.layer = this.game.add.tilemapLayer(0, 0, 800, 600, 'tile_image', this.map, 0)
 
-    // this.layer.resizeWorld()
+    this.layer.resizeWorld()
 
     this.mushroom = new Mushroom({
       game: this.game,
@@ -43,11 +49,11 @@ export default class extends Phaser.State {
     this.mushroom.body.velocity = new Phaser.Point(-90, 0)
 
     // Setup collision group for platforms
-    this.platforms = this.game.add.group()
-    this.platforms.enableBody = true
-    this.platforms.physicsBodyType = Phaser.Physics.ARCADE
-    this.platforms.create(0, 300, 'loaderBar')
-    this.platforms.setAll('body.immovable', true)
+    // this.platforms = this.game.add.group()
+    // this.platforms.enableBody = true
+    // this.platforms.physicsBodyType = Phaser.Physics.ARCADE
+    // this.platforms.create(0, 300, 'loaderBar')
+    // this.platforms.setAll('body.immovable', true)
 
     this.unbindKeys = () => {}
     this.bindKeys(Phaser.Keyboard.W, Phaser.Keyboard.A, Phaser.Keyboard.D)

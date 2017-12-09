@@ -38,22 +38,22 @@ export default class extends Phaser.State {
 
     this.setGravityMode(3)
 
-    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(this.gravityPlayerBindings, this)
-    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(this.gravityPlayerBindings, this)
-    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(this.gravityPlayerBindings, this)
-    this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(this.gravityPlayerBindings, this)
+    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(this.setGravityMode, this)
+    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(this.setGravityMode, this)
+    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(this.setGravityMode, this)
+    this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(this.setGravityMode, this)
 
     return this
   }
 
-  setGravityMode (direction) {
+  setGravityMode (key) {
     this.unbindKeys = () => {}
     const gravityForce = 300
     const jumpVelocity = 290
     const moveVelocity = 100
 
-    switch (direction) {
-      case 0:
+    switch (key.keyCode) {
+      case 37:
         // left
         this.mushroom.body.gravity.set(-gravityForce, 0)
         this.bindKeys(Phaser.Keyboard.D, Phaser.Keyboard.W, Phaser.Keyboard.S)
@@ -61,7 +61,7 @@ export default class extends Phaser.State {
         this.rightVelocity = new Phaser.Point(0, -moveVelocity)
         this.leftVelocity = new Phaser.Point(0, moveVelocity)
         break
-      case 1:
+      case 38:
         // up
         this.mushroom.body.gravity.set(0, -gravityForce)
         this.bindKeys(Phaser.Keyboard.S, Phaser.Keyboard.D, Phaser.Keyboard.A)
@@ -69,7 +69,7 @@ export default class extends Phaser.State {
         this.rightVelocity = new Phaser.Point(moveVelocity, 0)
         this.leftVelocity = new Phaser.Point(-moveVelocity, 0)
         break
-      case 2:
+      case 39:
         // right
         this.mushroom.body.gravity.set(gravityForce, 0)
         this.bindKeys(Phaser.Keyboard.A, Phaser.Keyboard.S, Phaser.Keyboard.W)
@@ -77,7 +77,7 @@ export default class extends Phaser.State {
         this.rightVelocity = new Phaser.Point(0, -moveVelocity)
         this.leftVelocity = new Phaser.Point(moveVelocity, 0)
         break
-      case 3:
+      case 40:
         // down
         this.mushroom.body.gravity.set(0, gravityForce)
         this.bindKeys(Phaser.Keyboard.W, Phaser.Keyboard.A, Phaser.Keyboard.D)
@@ -99,24 +99,6 @@ export default class extends Phaser.State {
       this.game.input.keyboard.removeKey(jumpKey)
       this.game.input.keyboard.removeKey(leftKey)
       this.game.input.keyboard.removeKey(rightKey)
-    }
-  }
-
-  gravityPlayerBindings (key) {
-    console.log(key.keyCode)
-    switch (key.keyCode) {
-      case 37: // left
-        this.setGravityMode(0)
-        break
-      case 38: // up
-        this.setGravityMode(1)
-        break
-      case 39: // right
-        this.setGravityMode(2)
-        break
-      case 40: // down
-        this.setGravityMode(3)
-        break
     }
   }
 

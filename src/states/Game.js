@@ -36,7 +36,7 @@ export default class extends Phaser.State {
     this.mushroom.body.bounce.set(0.4)
     this.mushroom.body.gravity.set(0, 180)
 
-    this.setGravityMode(3)
+    this.setGravityMode(0)
 
     this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(this.setGravityMode, this)
     this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(this.setGravityMode, this)
@@ -58,16 +58,20 @@ export default class extends Phaser.State {
         this.mushroom.body.gravity.set(-gravityForce, 0)
         this.bindKeys(Phaser.Keyboard.D, Phaser.Keyboard.W, Phaser.Keyboard.S)
         this.jumpVelocity = new Phaser.Point(jumpVelocity, 0)
-        this.rightVelocity = new Phaser.Point(0, -moveVelocity)
-        this.leftVelocity = new Phaser.Point(0, moveVelocity)
+        this.rightVelocity = new Phaser.Point(0, moveVelocity)
+        this.leftVelocity = new Phaser.Point(0, -moveVelocity)
+        this.jumpAxis = 'x'
+        this.moveAxis = 'y'
         break
       case 38:
         // up
         this.mushroom.body.gravity.set(0, -gravityForce)
         this.bindKeys(Phaser.Keyboard.S, Phaser.Keyboard.D, Phaser.Keyboard.A)
         this.jumpVelocity = new Phaser.Point(0, jumpVelocity)
-        this.rightVelocity = new Phaser.Point(moveVelocity, 0)
-        this.leftVelocity = new Phaser.Point(-moveVelocity, 0)
+        this.rightVelocity = new Phaser.Point(-moveVelocity, 0)
+        this.leftVelocity = new Phaser.Point(moveVelocity, 0)
+        this.jumpAxis = 'y'
+        this.moveAxis = 'x'
         break
       case 39:
         // right
@@ -75,46 +79,48 @@ export default class extends Phaser.State {
         this.bindKeys(Phaser.Keyboard.A, Phaser.Keyboard.S, Phaser.Keyboard.W)
         this.jumpVelocity = new Phaser.Point(-jumpVelocity, 0)
         this.rightVelocity = new Phaser.Point(0, -moveVelocity)
-        this.leftVelocity = new Phaser.Point(moveVelocity, 0)
+        this.leftVelocity = new Phaser.Point(0, moveVelocity)
+        this.jumpAxis = 'x'
+        this.moveAxis = 'y'
         break
       case 40:
+      default:
         // down
         this.mushroom.body.gravity.set(0, gravityForce)
         this.bindKeys(Phaser.Keyboard.W, Phaser.Keyboard.A, Phaser.Keyboard.D)
         this.jumpVelocity = new Phaser.Point(0, -jumpVelocity)
         this.rightVelocity = new Phaser.Point(moveVelocity, 0)
         this.leftVelocity = new Phaser.Point(-moveVelocity, 0)
+        this.jumpAxis = 'y'
+        this.moveAxis = 'x'
         break
     }
   }
 
   bindKeys (jumpKey, leftKey, rightKey) {
-    this.unbindKeys()
+    this.game.input.keyboard.removeKey(Phaser.Keyboard.W)
+    this.game.input.keyboard.removeKey(Phaser.Keyboard.A)
+    this.game.input.keyboard.removeKey(Phaser.Keyboard.S)
+    this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
 
     this.game.input.keyboard.addKey(jumpKey).onDown.add(this.jump, this)
     this.game.input.keyboard.addKey(leftKey).onDown.add(this.moveLeft, this)
     this.game.input.keyboard.addKey(rightKey).onDown.add(this.moveRight, this)
-
-    this.unbindKeys = () => {
-      this.game.input.keyboard.removeKey(jumpKey)
-      this.game.input.keyboard.removeKey(leftKey)
-      this.game.input.keyboard.removeKey(rightKey)
-    }
   }
 
   moveLeft () {
     console.log('moving left')
-    this.mushroom.body.velocity = this.leftVelocity
+    this.mushroom.body.velocity[this.moveAxis] = new Phaser.Point(this.leftVelocity.x, this.leftVelocity.y)[this.moveAxis]
   }
 
   moveRight () {
     console.log('moving right')
-    this.mushroom.body.velocity = this.rightVelocity
+    this.mushroom.body.velocity[this.moveAxis] = new Phaser.Point(this.rightVelocity.x, this.rightVelocity.y)[this.moveAxis]
   }
 
   jump () {
     console.log('jump')
-    this.mushroom.body.velocity = this.jumpVelocity
+    this.mushroom.body.velocity = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)
   }
 
   update (game) {

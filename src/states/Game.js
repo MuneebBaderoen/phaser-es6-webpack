@@ -7,6 +7,7 @@ export default class extends Phaser.State {
     game.load.image('mushroom', 'assets/images/Ball.png')
     game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.Tilemap.TILED_JSON)
     game.load.image('outer_block', 'assets/tilesets/UrbanBlock(BRICKS).png')
+    game.load.image('portal', 'assets/tilesets/Portal.png')
     game.load.image('background', 'assets/tilesets/UrbanBackground.png')
 
     game.can_jump = false
@@ -21,6 +22,10 @@ export default class extends Phaser.State {
     this.map.addTilesetImage('urban_brick', 'outer_block')
     this.map.setCollision(1)
     this.layer = this.map.createLayer('Terrain')
+    let exit = this.map.objects.Portal.find( o => o.name == 'portal1');
+    this.exitPortal = game.add.sprite(exit.x, exit.y, 'portal');
+
+    console.log(exit)
     // this.layer.debug = true
     this.layer.resizeWorld()
 
@@ -30,6 +35,7 @@ export default class extends Phaser.State {
       y: 100,
       asset: 'mushroom'
     })
+
 
     // Setup collision and physics on the mushroom
     this.game.add.existing(this.mushroom)
@@ -134,10 +140,21 @@ export default class extends Phaser.State {
     game.can_jump = true;
   }
 
+  //TODO: Implement win logic.
+  game_win() {
+    console.log("YOU WIN")
+  }
+
   update (game) {
     game.can_jump = false;
     game.physics.arcade.collide(this.mushroom, this.layer, this.allow_jump)
     game.physics.arcade.collide(this.mushroom, this.platforms)
+
+    //Check for win condition.
+    if (Phaser.Rectangle.containsPoint(this.exitPortal, this.mushroom.position)) {
+      this.game_win()
+    }
+
     if (!this.jumpKey.isDown && !this.leftKey.isDown && !this.rightKey.isDown) {
       this.mushroom.body.velocity.x *= 0.98
       this.mushroom.body.velocity.y *= 0.98

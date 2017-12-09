@@ -19,8 +19,30 @@
          "width":32,
          "x":0,
          "y":0
+        },
+        {
+         "draworder":"topdown",
+         "name":"Portal",
+         "objects":[
+                {
+                 "gid":2,
+                 "height":32,
+                 "id":3,
+                 "name":"portal1",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":542.757203708344,
+                 "y":607.330493610624
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
@@ -34,6 +56,19 @@
          "imagewidth":32,
          "margin":0,
          "name":"urban_brick",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":32,
+         "tilewidth":32
+        },
+        {
+         "columns":1,
+         "firstgid":2,
+         "image":"Portal.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"portal",
          "spacing":0,
          "tilecount":1,
          "tileheight":32,

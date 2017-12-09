@@ -4,10 +4,12 @@ import Mushroom from '../sprites/Mushroom'
 
 export default class extends Phaser.State {
   preload (game) {
-    game.load.image('mushroom', 'assets/images/mushroom2.png')
+    game.load.image('mushroom', 'assets/images/Ball.png')
     game.load.tilemap('Level1', 'assets/levels/first_level.json', null, Phaser.Tilemap.TILED_JSON)
     game.load.image('tile_image', 'assets/tilesets/UrbanBlock(SHADOW)_centre.png')
     game.load.image('background', 'assets/tilesets/UrbanBackground.png')
+
+    game.can_jump = false
   }
 
   create () {
@@ -122,12 +124,18 @@ export default class extends Phaser.State {
   }
 
   jump () {
-    console.log('jump')
-    this.mushroom.body.velocity[this.jumpAxis] = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)[this.jumpAxis]
+    if (game.can_jump) {
+      this.mushroom.body.velocity[this.jumpAxis] = new Phaser.Point(this.jumpVelocity.x, this.jumpVelocity.y)[this.jumpAxis]
+    }
+  }
+
+  allow_jump() {
+    game.can_jump = true;
   }
 
   update (game) {
-    game.physics.arcade.collide(this.mushroom, this.layer)
+    game.can_jump = false;
+    game.physics.arcade.collide(this.mushroom, this.layer, this.allow_jump)
     game.physics.arcade.collide(this.mushroom, this.platforms)
     if (!this.jumpKey.isDown && !this.leftKey.isDown && !this.rightKey.isDown) {
       this.mushroom.body.velocity.x *= 0.98

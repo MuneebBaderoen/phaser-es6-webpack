@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import WebFont from 'webfontloader'
 
 export default class extends Phaser.State {
   preload () {
@@ -14,6 +13,6 @@ export default class extends Phaser.State {
   render () {
     setTimeout(() => {
       this.state.start('Game')
-    }, 3000)
+    }, 2000)
   }
 }

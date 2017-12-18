@@ -87,7 +87,9 @@ export class Shape extends Phaser.Sprite {
     // ============================================
     // Generate tiles from template
     // ============================================
-    if (template.gridSize % 2 === 0) { throw new Error('Template grid size must be odd') }
+    if (template.gridSize % 2 === 0) {
+      throw new Error('Template grid size must be odd')
+    }
 
     let centerPosition
 

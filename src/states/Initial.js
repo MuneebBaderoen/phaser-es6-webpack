@@ -7,20 +7,28 @@ export class InitialState extends State {
     this.load.image('tile', 'assets/images/white_square.png')
   }
   create (game) {
-    setInterval(() => {
-      this.shape = new Shape({
-        game
-      })
+    this.shapes = game.add.physicsGroup(Phaser.Physics.ARCADE)
+    this.spawnShape(true)
 
-      game.add.existing(this.shape)
-    }, 1000)
+    setInterval(this.spawnShape.bind(this), 1000)
     game.physics.startSystem(Phaser.Physics.ARCADE)
   }
 
+  spawnShape (isCenterShape = false) {
+    let shape = new Shape({
+      game: this.game
+    })
+    shape.isCenterShape = false
+
+    this.shapes.add(shape)
+  }
+
   update () {
-    // console.log(this.shape.getBounds())
-    // this.shape.position.y += 1
-    // this.shape.position.x += 1
+    this.game.physics.arcade.collide(this.shapes, void 0, this.handleShapeCollision.bind(this))
+  }
+
+  handleShapeCollision (shapeA, shapeB) {
+    let x = 0
   }
 
   // render (game) {

@@ -3,7 +3,6 @@ import Phaser from 'phaser'
 export class Tile extends Phaser.Sprite {
   constructor ({ game, position = { x: 0, y: 0 } } = {}) {
     const asset = 'tile'
-    console.log(position)
 
     super(game, position.x, position.y, asset)
 

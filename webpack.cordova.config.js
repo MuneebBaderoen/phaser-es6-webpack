@@ -21,7 +21,6 @@ module.exports = {
       path.resolve(__dirname, 'src/main.js')
     ],
     vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
-
   },
   output: {
     path: path.resolve(__dirname, 'www/dist'),
@@ -39,7 +38,10 @@ module.exports = {
         comments: false
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.bundle.js'
+    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, 'assets/**/*'),

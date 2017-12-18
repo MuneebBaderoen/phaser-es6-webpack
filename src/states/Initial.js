@@ -10,7 +10,7 @@ export class InitialState extends State {
     this.shapes = game.add.physicsGroup(Phaser.Physics.ARCADE)
     this.spawnShape(true)
 
-    setInterval(this.spawnShape.bind(this), 1000)
+    setInterval(this.spawnShape.bind(this), 5000)
     game.physics.startSystem(Phaser.Physics.ARCADE)
   }
 
@@ -28,7 +28,7 @@ export class InitialState extends State {
   }
 
   handleShapeCollision (shapeA, shapeB) {
-    let x = 0
+    // shapeA.body.position.x -= 300
   }
 
   // render (game) {

@@ -23,7 +23,7 @@ class Game extends Phaser.Game {
 
     // with Cordova with need to wait that the device is ready so we will call the Boot state in another file
     if (window.cordova) {
-      document.addEventListener('deviceready', () => this.initialize(), false)
+      document.addEventListener('deviceready', this.initialize.bind(this), false)
     } else {
       this.initialize()
     }

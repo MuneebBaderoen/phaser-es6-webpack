@@ -33,7 +33,7 @@ module.exports = {
       filename: 'vendor.bundle.js'
     }),
     new HtmlWebpackPlugin({
-      filename: '../index.html',
+      filename: './index.html',
       template: './src/index.html',
       chunks: ['vendor', 'app'],
       chunksSortMode: 'manual',
@@ -49,13 +49,6 @@ module.exports = {
       },
       hash: false
     })
-    // new BrowserSyncPlugin({
-    //   host: process.env.IP || 'localhost',
-    //   port: process.env.PORT || 3000,
-    //   server: {
-    //     baseDir: ['./', './build']
-    //   }
-    // })
   ],
   module: {
     rules: [

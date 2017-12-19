@@ -22,6 +22,7 @@ module.exports = {
     ],
     vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
   },
+  devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, 'www/dist'),
     publicPath: 'dist/',
@@ -32,13 +33,13 @@ module.exports = {
     definePlugin,
     new CleanWebpackPlugin(['www']),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.UglifyJsPlugin({
-      drop_console: true,
-      minimize: true,
-      output: {
-        comments: false
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   drop_console: true,
+    //   minimize: true,
+    //   output: {
+    //     comments: false
+    //   }
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       filename: 'vendor.bundle.js'
@@ -56,16 +57,17 @@ module.exports = {
         'vendor', 'app'
       ],
       chunksSortMode: 'manual',
-      minify: {
-        removeAttributeQuotes: true,
-        collapseWhitespace: true,
-        html5: true,
-        minifyCSS: true,
-        minifyJS: true,
-        minifyURLs: true,
-        removeComments: true,
-        removeEmptyAttributes: true
-      },
+      // minify: {
+      //   removeAttributeQuotes: true,
+      //   collapseWhitespace: true,
+      //   html5: true,
+      //   minifyCSS: true,
+      //   minifyJS: true,
+      //   minifyURLs: true,
+      //   removeComments: true,
+      //   removeEmptyAttributes: true
+      // },
+      isDevice: true,
       hash: true
     })
   ],

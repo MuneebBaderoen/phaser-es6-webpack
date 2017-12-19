@@ -24,5 +24,11 @@
   <preference name="Fullscreen" value="true"/>
   <preference name="orientation" value="landscape"/>
   <plugin name="cordova-plugin-whitelist" spec="^1.3.2"/>
+  <plugin name="cordova-plugin-fullscreen" spec="~1.1.0"/>
+  <plugin name="cordova-plugin-device" spec="~1.1.7"/>
+  <plugin name="cordova-plugin-device-motion" spec="~1.2.5"/>
+  <plugin name="cordova-plugin-play-games-services" spec="~1.1.0">
+    <variable name="APP_ID" value="you_app_id_here"/>
+  </plugin>
   <engine name="android" spec="~6.2.3"/>
 </widget>

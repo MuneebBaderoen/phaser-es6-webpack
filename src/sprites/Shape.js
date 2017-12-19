@@ -14,13 +14,14 @@ class ShapeTemplate {
     gridSize = 3
   } = {}) {
     this.gridSize = gridSize
+
+    // Deal with list of values not equal to desired width and height
     this.values = this.fillArray(tilemap, this.gridSize * this.gridSize, 0)
 
-    // Deal with values not equal to desired width and height
     return this
   }
 
-  fillArray = (arr, desiredLength, padValue) => {
+  fillArray (arr, desiredLength, padValue) {
     while (arr.length < desiredLength) {
       arr.push(padValue)
     }
@@ -109,8 +110,7 @@ export class Shape extends Phaser.Sprite {
         // Add the new tile as a child of a shape sprite
         this.addChild(new Tile({
           game,
-          position: tilePosition,
-          asset: 'tile'
+          position: tilePosition
         }))
       }
     })

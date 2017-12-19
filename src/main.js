@@ -4,18 +4,18 @@ import Phaser from 'phaser'
 
 import { InitialState } from './states/Initial'
 
-import config from './config'
+import { Config } from './config'
 
 class Game extends Phaser.Game {
   constructor () {
     const docElement = document.documentElement
 
     // Update config with screen dimensions
-    config.gameWidth = docElement.clientWidth
-    config.gameHeight = docElement.clientHeight
+    Config.gameWidth = docElement.clientWidth
+    Config.gameHeight = docElement.clientHeight
 
     // Initialize webgl context
-    super(config.gameWidth, config.gameHeight, Phaser.AUTO, 'content', null)
+    super(Config.gameWidth, Config.gameHeight, Phaser.AUTO, 'content', null)
 
     // this.state.add('Boot', BootState, false)
     this.state.add('Game', InitialState, false)

@@ -4,44 +4,46 @@ var CleanWebpackPlugin = require('clean-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 
-// Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+module.exports = function (options) {
+  // Get options that will be used
+  var projectRoot = options.projectRoot
+  // var isDebug = !options.isRelease
+  var isRelease = options.isRelease
+  var isCordova = options.isCordova
 
-var isCordova = true
+  // Phaser webpack config
+  var phaserModule = path.join(projectRoot, '/node_modules/phaser-ce/')
+  var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
+  var pixi = path.join(phaserModule, 'build/custom/pixi.js')
+  var p2 = path.join(phaserModule, 'build/custom/p2.js')
 
-// Setup paths
-var webPaths = {
-  output: path.resolve(__dirname, 'dist')
-}
+  // Setup paths
+  var webPaths = {
+    clean: [path.resolve(projectRoot, 'dist')],
+    output: path.resolve(projectRoot, 'dist'),
+    html: path.resolve(projectRoot, 'dist/index.html'),
+    htmlSource: path.resolve(projectRoot, './src/index.html'),
+    copyPaths: []
+  }
 
-var cordovaPaths = {
-  output: path.resolve(__dirname, 'www/dist')
-}
+  var cordovaPaths = {
+    clean: [path.resolve(projectRoot, 'www')],
+    output: path.resolve(projectRoot, 'www/dist'),
+    html: path.resolve(projectRoot, 'www/index.html'),
+    htmlSource: path.resolve(projectRoot, './src/index.html'),
+    copyPaths: [{
+      from: path.resolve(projectRoot, 'assets/**/*'),
+      to: path.resolve(projectRoot, 'www')
+    }]
+  }
 
-var PATHS = isCordova ? cordovaPaths : webPaths
+  var PATHS = isCordova ? cordovaPaths : webPaths
 
-// Setup minify settings
-var minifySettingsDebug = {
-  removeAttributeQuotes: false,
-  collapseWhitespace: false,
-  html5: false,
-  minifyCSS: false,
-  minifyJS: false,
-  minifyURLs: false,
-  removeComments: false,
-  removeEmptyAttributes: false
-}
-
-module.exports = function () {
   return {
-    devtool: 'eval-source-map', // debug
     entry: {
       app: [
         'babel-polyfill',
-        path.resolve(__dirname, 'src/main.js')
+        path.resolve(projectRoot, 'src/main.js')
       ],
       vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
     },
@@ -51,16 +53,14 @@ module.exports = function () {
       publicPath: '/dist',
       filename: 'bundle.js'
     },
-    watch: true, // debug
     plugins: [
       new webpack.DefinePlugin({
-        __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
+        __DEVICE__: isCordova
       }),
-      // Cordova only
-      new CleanWebpackPlugin(['www'], {
+      new CleanWebpackPlugin(PATHS.clean, {
+        root: projectRoot,
         exclude: ['.gitkeep']
       }),
-      // Cordova only
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Cordova only
       // new webpack.optimize.UglifyJsPlugin({
@@ -74,29 +74,24 @@ module.exports = function () {
         name: 'vendor',
         filename: 'vendor.bundle.js'
       }),
-      // Cordova only
-      new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, 'assets/**/*'),
-        to: path.resolve(__dirname, 'www')
-      }]),
+      new CopyWebpackPlugin(PATHS.copyPaths),
       new HtmlWebpackPlugin({
-        filename: path.resolve(__dirname, 'www/index.html'),
-        template: './src/index.html',
-        chunks: [
-          'vendor', 'app'
-        ],
+        filename: PATHS.html,
+        template: PATHS.htmlSource,
+        chunks: [ 'vendor', 'app' ],
         chunksSortMode: 'manual',
-        minify: minifySettingsDebug,
-        isDevice: true,
+        minify: {
+          removeAttributeQuotes: isRelease,
+          collapseWhitespace: isRelease,
+          html5: true,
+          minifyCSS: isRelease,
+          minifyJS: isRelease,
+          minifyURLs: isRelease,
+          removeComments: isRelease,
+          removeEmptyAttributes: isRelease
+        },
+        isDevice: isCordova,
         hash: true
-      }),
-      new HtmlWebpackPlugin({
-        filename: './index.html',
-        template: './src/index.html',
-        chunks: ['vendor', 'app'],
-        chunksSortMode: 'manual',
-        minify: minifySettingsDebug,
-        hash: false
       })
     ],
     module: {
@@ -113,7 +108,10 @@ module.exports = function () {
       tls: 'empty'
     },
     resolve: {
-      modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+      modules: [
+        path.resolve(projectRoot, 'src'),
+        path.resolve(projectRoot, 'node_modules')
+      ],
       alias: {
         'phaser': phaser,
         'pixi': pixi,

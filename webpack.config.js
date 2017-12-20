@@ -6,14 +6,12 @@ var release = require('./build/webpack/config.release')
 
 var options = {
   projectRoot: __dirname,
-  isRelease: false,
-  isCordova: true
+  isRelease: process.env.npm_lifecycle_event.indexOf('release') > -1,
+  isCordova: process.env.npm_lifecycle_event.indexOf('cordova') > -1
 }
 
 console.log('isCordova:', options.isCordova)
 console.log('isRelease:', options.isRelease)
-
-console.log('npm event:', process.env.npm_lifecycle_event)
 
 module.exports = function () {
   switch ('debug') {

@@ -43,7 +43,8 @@
         "phaser-ce": "^2.8.3",
         "webfontloader": "^1.6.28",
         "webpack-dev-server": "^2.9.5",
-        "webpack-merge": "^4.1.1"
+        "webpack-merge": "^4.1.1",
+        "yargs": "^10.0.3"
     },
     "cordova": {
         "platforms": [

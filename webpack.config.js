@@ -1,74 +1,21 @@
-var path = require('path')
-var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+var merge = require('webpack-merge')
+var yargs = require('yargs')
 
-// Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+var common = require('./build/webpack/config.common')
+var debug = require('./build/webpack/config.debug')
+var release = require('./build/webpack/config.release')
 
-module.exports = {
-  entry: {
-    app: [
-      'babel-polyfill',
-      path.resolve(__dirname, 'src/main.js')
-    ],
-    vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
-  },
-  devtool: 'eval-source-map',
-  output: {
-    pathinfo: true,
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist',
-    filename: 'bundle.js'
-  },
-  watch: true,
-  plugins: [
-    new webpack.DefinePlugin({
-      __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.bundle.js'
-    }),
-    new HtmlWebpackPlugin({
-      filename: './index.html',
-      template: './src/index.html',
-      chunks: ['vendor', 'app'],
-      chunksSortMode: 'manual',
-      minify: {
-        removeAttributeQuotes: false,
-        collapseWhitespace: false,
-        html5: false,
-        minifyCSS: false,
-        minifyJS: false,
-        minifyURLs: false,
-        removeComments: false,
-        removeEmptyAttributes: false
-      },
-      hash: false
-    })
-  ],
-  module: {
-    rules: [
-      { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
-      { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
-      { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-      { test: /p2\.js/, use: ['expose-loader?p2'] }
-    ]
-  },
-  node: {
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
-  },
-  resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    alias: {
-      'phaser': phaser,
-      'pixi': pixi,
-      'p2': p2
-    }
+module.exports = function () {
+  switch (mode) {
+    case 'debug':
+      return merge(
+        common,
+        debug
+      )
+    case 'release':
+      return merge(
+        common,
+        release
+      )
   }
 }

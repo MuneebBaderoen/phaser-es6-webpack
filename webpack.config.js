@@ -8,7 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var WebpackNotifierPlugin = require('webpack-notifier')
 
-// Builds flags
+// Build flags
 var projectRoot = __dirname
 var isRelease = process.env.npm_lifecycle_event.indexOf('release') > -1
 var isCordova = process.env.npm_lifecycle_event.indexOf('cordova') > -1
